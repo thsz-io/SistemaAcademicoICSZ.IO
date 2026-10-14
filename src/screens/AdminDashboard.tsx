@@ -1,0 +1,31 @@
+import type { AdminScreen } from "../AdminApp";
+import { useAdmin } from "../AdminContext";
+import { Badge, Button, Card, Page, PageHeader, Stat } from "../components/AdminUI";
+import AdminIcon from "../components/AdminIcons";
+
+export default function AdminDashboard({navigate}:{navigate:(s:AdminScreen)=>void}){
+ const {students,professors,disciplines,classes,events,reenrollments,notices,certificates,activities}=useAdmin();
+ const pending=reenrollments.filter(r=>r.status!=="Atualizada");
+ const upcoming=events.filter(e=>e.status!=="Encerrado").slice(0,3);
+ return <Page>
+   <PageHeader title="Visão geral do SIGA 2.0" description="Acompanhe pendências e atividades que precisam da atenção da Administração." action={<Button icon="refresh" variant="secondary" onClick={()=>location.reload()}>Atualizar dados</Button>} />
+   <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+     <Stat label="Alunos" value={students.length} detail={`${students.filter(s=>s.status==="Ativo").length} ativos`} icon="student" tone="blue"/>
+     <Stat label="Professores" value={professors.length} detail={`${professors.filter(p=>p.status==="Ativo").length} ativos`} icon="teacher" tone="green"/>
+     <Stat label="Disciplinas" value={disciplines.length} detail={`${classes.length} turmas cadastradas`} icon="book" tone="orange"/>
+     <Stat label="Rematrículas pendentes" value={pending.length} detail="Aguardando atualização" icon="refresh" tone="red"/>
+   </div>
+   <div className="grid lg:grid-cols-[1.3fr_.7fr] gap-5">
+     <Card className="p-5">
+       <div className="flex items-center justify-between mb-4"><div><h3 className="font-bold" style={{fontFamily:"Outfit, sans-serif"}}>Pendências que exigem ação</h3><p className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>Itens administrativos recentes.</p></div><button onClick={()=>navigate("admin-reenrollments")} className="text-xs font-semibold" style={{color:"var(--primary)"}}>Ver rematrículas</button></div>
+       <div className="space-y-3">{pending.slice(0,4).map(r=><div key={r.id} className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center gap-3" style={{borderColor:"var(--border)"}}><div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{background:"#fff7ed",color:"#c2410c"}}><AdminIcon name="refresh" size={18}/></div><div className="flex-1"><div className="font-semibold text-sm">{r.student} <span className="font-normal" style={{color:"var(--muted-foreground)"}}>· RA {r.ra}</span></div><div className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>5º semestre · {r.disciplines.length} disciplinas selecionadas · {r.submittedAt}</div></div><Badge tone={r.status==="Nova"?"warning":"info"}>{r.status}</Badge><Button variant="secondary" onClick={()=>navigate("admin-reenrollments")}>Abrir</Button></div>)}{pending.length===0&&<div className="py-8 text-center text-sm" style={{color:"var(--muted-foreground)"}}>Nenhuma rematrícula pendente.</div>}</div>
+     </Card>
+     <Card className="p-5"><div className="flex items-center justify-between mb-4"><div><h3 className="font-bold" style={{fontFamily:"Outfit, sans-serif"}}>Resumo operacional</h3><p className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>Status do painel.</p></div></div><div className="space-y-3"><Row label="Eventos publicados" value={events.filter(e=>e.status==="Publicado").length}/><Row label="Avisos ativos" value={notices.filter(n=>n.status==="Publicado").length}/><Row label="Certificados emitidos" value={certificates.length}/><Row label="Registros no histórico" value={activities.length}/><Row label="Alunos históricos" value={students.filter(s=>s.status==="Inativo").length}/></div><div className="mt-5 rounded-xl p-3" style={{background:"#eff6ff"}}><div className="text-xs font-semibold" style={{color:"#1d4ed8"}}>Retenção acadêmica</div><div className="text-[11px] mt-1" style={{color:"#334155"}}>Cadastros inativos permanecem disponíveis para consulta histórica por pelo menos 2 anos.</div></div></Card>
+   </div>
+   <div className="grid lg:grid-cols-2 gap-5">
+     <Card className="p-5"><div className="flex items-center justify-between mb-4"><div><h3 className="font-bold" style={{fontFamily:"Outfit, sans-serif"}}>Próximos eventos</h3><p className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>Eventos publicados pela Administração.</p></div><button onClick={()=>navigate("admin-events")} className="text-xs font-semibold" style={{color:"var(--primary)"}}>Gerenciar</button></div><div className="space-y-3">{upcoming.map(e=><div key={e.id} className="flex gap-3 p-3 rounded-xl border" style={{borderColor:"var(--border)"}}><div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{background:"var(--secondary)",color:"var(--primary)"}}><AdminIcon name="event"/></div><div><div className="text-sm font-semibold">{e.name}</div><div className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>{e.type} · {e.date} · {e.time}</div></div></div>)}</div></Card>
+     <Card className="p-5"><div className="flex items-center justify-between mb-4"><div><h3 className="font-bold" style={{fontFamily:"Outfit, sans-serif"}}>Atividades recentes</h3><p className="text-xs mt-1" style={{color:"var(--muted-foreground)"}}>Últimas ações administrativas.</p></div><button onClick={()=>navigate("admin-history")} className="text-xs font-semibold" style={{color:"var(--primary)"}}>Ver histórico</button></div><div className="space-y-3">{activities.slice(0,4).map(a=><div key={a.id} className="flex gap-3"><div className="w-2 h-2 rounded-full mt-2" style={{background:"var(--primary)"}}/><div><div className="text-sm font-semibold">{a.action}</div><div className="text-xs" style={{color:"var(--muted-foreground)"}}>{a.target} · {a.detail}</div><div className="text-[10px] mt-1" style={{color:"var(--muted-foreground)"}}>{a.date}</div></div></div>)}</div></Card>
+   </div>
+ </Page>
+}
+function Row({label,value}:{label:string;value:number}){return <div className="flex items-center justify-between py-2 border-b last:border-0" style={{borderColor:"var(--border)"}}><span className="text-sm" style={{color:"var(--muted-foreground)"}}>{label}</span><span className="font-bold" style={{fontFamily:"Outfit, sans-serif"}}>{value}</span></div>}

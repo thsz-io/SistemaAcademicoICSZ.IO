@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --primary: #0f3460;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f0fe;
+  --secondary-foreground: #0f3460;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #f97316;
+  --accent-foreground: #ffffff;
+  --border: #e2e8f0;
+  --ring: #0f3460;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Tema escuro e adaptação de componentes legados */
+:root[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #e5edf8;
+  --card: #162235;
+  --card-foreground: #e5edf8;
+  --primary: #5b8fd1;
+  --primary-foreground: #ffffff;
+  --secondary: #203047;
+  --secondary-foreground: #e5edf8;
+  --muted: #18263a;
+  --muted-foreground: #aab8ca;
+  --accent: #fb923c;
+  --accent-foreground: #111827;
+  --border: #2c3c52;
+  --ring: #7aa7df;
+}
+
+:root[data-theme="dark"] body { background-color: var(--background); color: var(--foreground); }
+:root[data-theme="dark"] .bg-white { background-color: var(--card) !important; }
+:root[data-theme="dark"] .bg-slate-50 { background-color: var(--muted) !important; }
+:root[data-theme="dark"] .bg-slate-100 { background-color: var(--secondary) !important; }
+:root[data-theme="dark"] .hover\:bg-slate-50:hover { background-color: var(--muted) !important; }
+:root[data-theme="dark"] .hover\:bg-slate-100:hover { background-color: var(--secondary) !important; }
+:root[data-theme="dark"] .text-slate-900,
+:root[data-theme="dark"] .text-slate-800,
+:root[data-theme="dark"] .text-slate-700,
+:root[data-theme="dark"] .text-slate-600,
+:root[data-theme="dark"] .text-slate-500 { color: var(--foreground) !important; }
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea { background: var(--muted); color: var(--foreground); border-color: var(--border); }
+:root[data-theme="dark"] option { background: var(--card); color: var(--foreground); }
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #42536a; }

@@ -1,0 +1,10 @@
+{
+  "description": "Provides students with an intuitive academic dashboard to track classes, grades, attendance, schedules, documents, and key deadlines in a clear, accessible interface.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
